@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"net/url"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -26,6 +27,12 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&link)
 	if err != nil {
 		http.Error(w, "Geçersiz JSON formatı: ", http.StatusBadRequest)
+		return
+	}
+
+	_, err = url.ParseRequestURI(link.Link)
+	if err != nil {
+		http.Error(w, "Geçersiz link girişi", http.StatusBadRequest)
 		return
 	}
 
