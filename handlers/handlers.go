@@ -12,17 +12,17 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-type URL struct {
+type ShortenedLink struct {
 	Id        int    `json:"id"`
 	Link      string `json:"link"`
 	ShortLink string `json:"shortLink"`
 }
 
-var links []URL
+var links []ShortenedLink
 var Conn *pgx.Conn
 
 func CreatingHandler(w http.ResponseWriter, r *http.Request) {
-	var link URL
+	var link ShortenedLink
 	err := json.NewDecoder(r.Body).Decode(&link)
 	if err != nil {
 		http.Error(w, "Geçersiz JSON formatı: ", http.StatusBadRequest)
