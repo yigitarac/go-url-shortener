@@ -3,11 +3,13 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 type URL struct {
@@ -28,13 +30,23 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	link.ShortLink = createShortLink()
-	fmt.Println("Link başarıyla oluşturuldu!")
-
-	_, err = Conn.Exec(context.Background(), "INSERT INTO links(link, shortLink) VALUES ($1, $2)", link.Link, link.ShortLink)
-	if err != nil {
-		fmt.Println("Kısaltılan link veritabanına eklenemedi")
-		return
+	var uniqueErr *pgconn.PgError
+	for {
+		_, err = Conn.Exec(context.Background(), "INSERT INTO links(link, shortLink) VALUES ($1, $2)", link.Link, link.ShortLink)
+		if err != nil {
+			if errors.As(err, &uniqueErr) {
+				if uniqueErr.Code == "23505" {
+					link.ShortLink = createShortLink()
+				} else {
+					fmt.Println("Kritik Hata!")
+					return
+				}
+			}
+		} else {
+			break
+		}
 	}
+	fmt.Println("Link başarıyla oluşturuldu!")
 
 	json.NewEncoder(w).Encode(link)
 }
