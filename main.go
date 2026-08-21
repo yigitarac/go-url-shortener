@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"math/rand"
 	"net/http"
+	"os"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 )
 
 type URL struct {
@@ -16,14 +21,29 @@ type URL struct {
 var links []URL
 
 func main() {
-
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println(".env dosyası yüklenemedi")
+		return
+	}
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /{shortLink}", ListingHandler)
 	mux.HandleFunc("POST /shortener", CreatingHandler)
 
 	fmt.Println("Sunucu başlatılıyor")
+
+	databaseURL := os.Getenv("DATABASE_URL")
+
+	conn, err := pgx.Connect(context.Background(), databaseURL)
+	if err != nil {
+		fmt.Fprint(os.Stderr, "Veritabanına bağlanılamadı")
+	}
+
+	defer conn.Close(context.Background())
+
 	http.ListenAndServe(":8080", mux)
+
 }
 
 func CreatingHandler(w http.ResponseWriter, r *http.Request) {
