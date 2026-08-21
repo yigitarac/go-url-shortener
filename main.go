@@ -34,8 +34,11 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("Link başarıyla alındı!")
+	link.ShortLink = createShortLink()
 	links = append(links, link)
+	fmt.Println("Link başarıyla oluşturuldu!")
+
+	json.NewEncoder(w).Encode(link)
 }
 
 func ListingHandler(w http.ResponseWriter, r *http.Request) {
