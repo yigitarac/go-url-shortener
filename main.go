@@ -19,6 +19,7 @@ type URL struct {
 }
 
 var links []URL
+var conn *pgx.Conn
 
 func main() {
 	err := godotenv.Load()
@@ -35,9 +36,10 @@ func main() {
 
 	databaseURL := os.Getenv("DATABASE_URL")
 
-	conn, err := pgx.Connect(context.Background(), databaseURL)
+	conn, err = pgx.Connect(context.Background(), databaseURL)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "Veritabanına bağlanılamadı")
+		return
 	}
 
 	defer conn.Close(context.Background())
@@ -55,8 +57,13 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	link.ShortLink = createShortLink()
-	links = append(links, link)
 	fmt.Println("Link başarıyla oluşturuldu!")
+
+	_, err = conn.Exec(context.Background(), "INSERT INTO links(link, shortLink) VALUES ($1, $2)", link.Link, link.ShortLink)
+	if err != nil {
+		fmt.Println("Kısaltılan link veritabanına eklenemedi")
+		return
+	}
 
 	json.NewEncoder(w).Encode(link)
 }
