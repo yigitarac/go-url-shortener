@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 )
 
@@ -36,6 +37,7 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Link başarıyla alındı!")
 	links = append(links, link)
 }
+
 func ListingHandler(w http.ResponseWriter, r *http.Request) {
 	shortLink := r.PathValue("shortLink")
 	for i := range links {
@@ -45,6 +47,12 @@ func ListingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func createShortLink(id int) {
-
+func createShortLink() string {
+	var shortLink []byte
+	characters := "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuopasdfghjklizxcvbnm123456789"
+	for i := 0; i < 6; i++ {
+		index := rand.Intn(len(characters))
+		shortLink = append(shortLink, characters[index])
+	}
+	return string(shortLink)
 }
