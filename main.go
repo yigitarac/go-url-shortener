@@ -70,11 +70,13 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 
 func ListingHandler(w http.ResponseWriter, r *http.Request) {
 	shortLink := r.PathValue("shortLink")
-	for i := range links {
-		if links[i].ShortLink == shortLink {
-			http.Redirect(w, r, links[i].Link, 302)
-		}
+	var longLink string
+	err := conn.QueryRow(context.Background(), "SELECT link FROM links WHERE shortLink = $1", shortLink).Scan(&longLink)
+	if err != nil {
+		fmt.Println("Uzun link bulunamadı")
+		return
 	}
+	http.Redirect(w, r, longLink, 302)
 }
 
 func createShortLink() string {
