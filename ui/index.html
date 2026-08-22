@@ -1,7 +1,14 @@
-<div>
-    <input id="linkBox" placeholder="Paste the link here">
-    <button id="shortenBtn">Shorten</button>
-    <p id="result"></p>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<div class="h-screen flex flex-col justify-center items-center bg-[#5e81ac]">
+    <div class="bg-[#2e3440] p-8 rounded-2xl shadow-2xl flex flex-col gap-4 w-96">
+        <input id="linkBox" placeholder="Paste the link here" class="bg-[#4c566a] rounded-lg outline-none focus:ring-2 focus:ring-[#81a1c1] px-4 py-2">
+        <button id="shortenBtn" class="bg-[#81a1c1] rounded-lg border px-4 py-2 hover:bg-[#434c5e]">Shorten</button>
+        <button id="copyBtn" class="bg-[#e5e9f0] rounded-lg hover:bg-[#d8dee9] px-4 py-2">Copy link</button>
+        <a href ="#" id="result" class="bg-[#e5e9f0] rounded-lg hover:bg-[#d8dee9] px-4 py-2">Go to your link</a>
+    </div>
 </div>
 
 
@@ -10,7 +17,9 @@
   const button = document.getElementById("shortenBtn");
   const box = document.getElementById("linkBox");
   const result = document.getElementById("result");
+  const copy = document.getElementById("copyBtn");
   var link;
+  var data;
 
   button.addEventListener("click", async function getInput() {
     const linkObject = {link: box.value}
@@ -21,9 +30,13 @@
       headers: {"Content-Type":"application/json"},
       body: link
     });
-
-    var data = await answer.json()
-    result.innerText = data.shortLink
+    data = await answer.json()
+    result.href = "http://localhost:8080/p/" + data.shortLink
+    copy.addEventListener("click", function copyLink() {
+      var copyText = "http://localhost:8080/p/" + data.shortLink;
+      navigator.clipboard.writeText(copyText);
+      copy.innerText = copyText;
+    });
   });
 
 </script>
