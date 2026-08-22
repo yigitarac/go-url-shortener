@@ -2,12 +2,34 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<div class="h-screen flex flex-col justify-center items-center bg-[#5e81ac]">
-    <div class="bg-[#2e3440] p-8 rounded-2xl shadow-2xl flex flex-col gap-4 w-96">
-        <input id="linkBox" placeholder="Paste the link here" class="bg-[#4c566a] rounded-lg outline-none focus:ring-2 focus:ring-[#81a1c1] px-4 py-2">
-        <button id="shortenBtn" class="bg-[#81a1c1] rounded-lg border px-4 py-2 hover:bg-[#434c5e]">Shorten</button>
-        <button id="copyBtn" class="bg-[#e5e9f0] rounded-lg hover:bg-[#d8dee9] px-4 py-2">Copy link</button>
-        <a href ="#" id="result" class="bg-[#e5e9f0] rounded-lg hover:bg-[#d8dee9] px-4 py-2">Go to your link</a>
+<div class="h-screen flex justify-center items-center bg-[#2e3440]">
+    <div class="bg-[#3b4252] p-8 rounded-2xl shadow-2xl flex flex-col gap-5 w-96">
+
+        <h1 class="text-white text-2xl font-bold text-center">URL Shortener</h1>
+
+        <input id="linkBox"
+               placeholder="Paste your long link..."
+               class="bg-[#4c566a] text-white placeholder-gray-400 rounded-lg outline-none focus:ring-2 focus:ring-[#88c0d0] px-4 py-3 transition-all">
+
+        <button id="shortenBtn"
+                class="bg-[#81a1c1] text-white font-semibold rounded-lg px-4 py-3 hover:bg-[#5e81ac] transition-colors cursor-pointer">
+            Shorten
+        </button>
+
+        <div id="resultContainer" class="hidden flex flex-col gap-3 mt-2">
+
+            <div class="w-full h-px bg-[#4c566a]"></div>
+
+            <a href="#" id="result" target="_blank"
+               class="text-center text-[#88c0d0] hover:text-[#8fbcbb] font-medium truncate transition-colors">
+            </a>
+
+            <button id="copyBtn"
+                    class="bg-[#4c566a] text-white text-sm rounded-lg hover:bg-[#434c5e] px-4 py-2 transition-colors cursor-pointer">
+                Copy Link
+            </button>
+        </div>
+
     </div>
 </div>
 
@@ -32,11 +54,13 @@
     });
     data = await answer.json()
     result.href = "http://localhost:8080/p/" + data.shortLink
-    copy.addEventListener("click", function copyLink() {
-      var copyText = "http://localhost:8080/p/" + data.shortLink;
-      navigator.clipboard.writeText(copyText);
-      copy.innerText = copyText;
-    });
+    document.getElementById("resultContainer").classList.remove("hidden");
+  });
+
+  copy.addEventListener("click", function copyLink() {
+    var copyText = "http://localhost:8080/p/" + data.shortLink;
+    navigator.clipboard.writeText(copyText);
+    copy.innerText = "Copied!";
   });
 
 </script>
