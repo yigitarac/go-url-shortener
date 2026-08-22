@@ -1,3 +1,29 @@
-<header>
-    <h1>sa</h1>
-</header>
+<div>
+    <input id="linkBox" placeholder="Paste the link here">
+    <button id="shortenBtn">Shorten</button>
+    <p id="result"></p>
+</div>
+
+
+<script>
+
+  const button = document.getElementById("shortenBtn");
+  const box = document.getElementById("linkBox");
+  const result = document.getElementById("result");
+  var link;
+
+  button.addEventListener("click", async function getInput() {
+    const linkObject = {link: box.value}
+    link = JSON.stringify(linkObject);
+
+    var answer = await fetch("/shortener",{
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: link
+    });
+
+    var data = await answer.json()
+    result.innerText = data.shortLink
+  });
+
+</script>
