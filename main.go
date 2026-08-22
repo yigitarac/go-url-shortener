@@ -19,10 +19,14 @@ func main() {
 		fmt.Println(".env dosyası yüklenemedi")
 		return
 	}
+
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /{shortLink}", middleware.FirstMiddleware(handlers.ListingHandler))
+	mux.HandleFunc("GET /p/{shortLink}", middleware.FirstMiddleware(handlers.ListingHandler))
 	mux.HandleFunc("POST /shortener", middleware.FirstMiddleware(handlers.CreatingHandler))
+
+	fileServer := http.FileServer(http.Dir("./ui"))
+	mux.Handle("/", fileServer)
 
 	fmt.Println("Sunucu başlatılıyor")
 
