@@ -53,12 +53,13 @@
       body: link
     });
     data = await answer.json()
-    result.href = "http://localhost:8080/p/" + data.shortLink
+    result.href = "https://shortener.pionter.net/p/" + data.shortLink
+    result.innerText = "shortener.pionter.net/p/" + data.shortLink;
     document.getElementById("resultContainer").classList.remove("hidden");
   });
 
   copy.addEventListener("click", function copyLink() {
-    var copyText = "http://localhost:8080/p/" + data.shortLink;
+    var copyText = "https://shortener.pionter.net/p/" + data.shortLink;
     navigator.clipboard.writeText(copyText);
     copy.innerText = "Copied!";
   });
