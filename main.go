@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/yigitarac/go-url-shortener/handlers"
+	"github.com/yigitarac/go-url-shortener/middleware"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
@@ -20,8 +21,8 @@ func main() {
 	}
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /{shortLink}", handlers.ListingHandler)
-	mux.HandleFunc("POST /shortener", handlers.CreatingHandler)
+	mux.HandleFunc("GET /{shortLink}", middleware.FirstMiddleware(handlers.ListingHandler))
+	mux.HandleFunc("POST /shortener", middleware.FirstMiddleware(handlers.CreatingHandler))
 
 	fmt.Println("Sunucu başlatılıyor")
 
