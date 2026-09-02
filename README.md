@@ -2,7 +2,7 @@
 
 A simple URL shortener built with Go, PostgreSQL, HTML, Tailwind CSS, and JavaScript.
 
-Live app: **https://shortener.pionter.net**
+Live app: **https://url.pionter.net**
 
 ![Main View](imgs/main.png)
 ![Shorten View](imgs/shorten.png)
