@@ -47,19 +47,19 @@
     const linkObject = {link: box.value}
     link = JSON.stringify(linkObject);
 
-    var answer = await fetch("/shortener",{
+    var answer = await fetch("/url",{
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: link
     });
     data = await answer.json()
-    result.href = "https://shortener.pionter.net/p/" + data.shortLink
-    result.innerText = "shortener.pionter.net/p/" + data.shortLink;
+    result.href = "https://url.pionter.net/p/" + data.shortLink
+    result.innerText = "url.pionter.net/p/" + data.shortLink;
     document.getElementById("resultContainer").classList.remove("hidden");
   });
 
   copy.addEventListener("click", function copyLink() {
-    var copyText = "https://shortener.pionter.net/p/" + data.shortLink;
+    var copyText = "https://url.pionter.net/p/" + data.shortLink;
     navigator.clipboard.writeText(copyText);
     copy.innerText = "Copied!";
   });
