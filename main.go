@@ -23,7 +23,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /p/{shortLink}", middleware.FirstMiddleware(handlers.ListingHandler))
-	mux.HandleFunc("POST /shortener", middleware.FirstMiddleware(handlers.CreatingHandler))
+	mux.HandleFunc("POST /url", middleware.FirstMiddleware(handlers.CreatingHandler))
 
 	fileServer := http.FileServer(http.Dir("./ui"))
 	mux.Handle("/", fileServer)
