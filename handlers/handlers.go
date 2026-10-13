@@ -48,6 +48,9 @@ func CreatingHandler(w http.ResponseWriter, r *http.Request) {
 					fmt.Println("Kritik Hata!")
 					return
 				}
+			} else {
+				fmt.Println("Kritik Hata!")
+				return
 			}
 		} else {
 			break
